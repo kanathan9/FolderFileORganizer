@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -14,8 +11,8 @@ public class FolderFilesOrganizer {
     private static final StringBuilder fileToSearch = new StringBuilder();
     private static final StringBuilder fileType = new StringBuilder();
     private static Boolean group = Boolean.FALSE;
-    private static final int nameLength = 2;
-    private static final int numberOfFiles = 2;
+    private static int nameLength;
+    private static int numberOfFiles;
 
     private static final String[] videoFiles = {"VIDEOS",".mp4",".avi",".mkv"};
     private static final String[] documentFiles = {"DOCUMENTS",".txt",".pdf",".doc",".docx"};
@@ -79,6 +76,14 @@ public class FolderFilesOrganizer {
         System.out.println("To search a file: SEARCH [DIR_NAME] [FILE_NAME] [FILE_TYPE?");
         System.out.println("Notes: FILE_TYPE values will be available after running ORDER command.");
         System.out.println(" ");
+        try(InputStream in = new FileInputStream("FFO.properties")){
+            Properties prop = new Properties();
+            prop.load(in);
+            nameLength = Integer.valueOf(prop.getProperty("nameLength"));
+            numberOfFiles = Integer.valueOf(prop.getProperty("numberOfFiles"));
+        }catch(IOException e){
+
+        }
     }
 
     private static void runCommand(){
